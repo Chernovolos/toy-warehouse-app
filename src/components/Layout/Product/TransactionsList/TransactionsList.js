@@ -11,14 +11,13 @@ class TransactionsList extends React.Component {
     }
 
     detailsTransactions = (id) => {
-        console.log(id)
+        console.log("id", id);
         this.props.history.push({ pathname: `/transactions/${id}`});
     };
 
     render() {
         let {transactionsList} = this.props;
 
-        console.log("transactions", transactionsList);
         return (
             <Container>
                 <Row className="justify-content-between">
@@ -35,13 +34,12 @@ class TransactionsList extends React.Component {
                             </thead>
                             <tbody>
                                     {
-                                        transactionsList && transactionsList.map((transaction) => {
+                                        transactionsList.map((transaction) => {
                                             return <TransactionItem
-                                                key={transaction.id}
-                                                transaction={transaction}
-                                                transactionToys={transaction.toys}
-                                                detailsTransactions={this.detailsTransactions}
-                                            />
+                                                        key={transaction.id}
+                                                        transaction={transaction}
+                                                        detailsTransactions={this.detailsTransactions}
+                                                    />
                                         })
                                     }
                             </tbody>
