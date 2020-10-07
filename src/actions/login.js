@@ -1,7 +1,8 @@
 import * as ACTIONS from "../constants/types";
+import  {TOKEN_KEY}  from "../constants/route";
 import serviceAPI from "../services/api";
 
-const TOKEN_KEY = "TOKEN";
+
 
 // delete
 // export const setProfile = (token) => ({type: ACTIONS.SET_PROFILE, payload: token});
@@ -34,6 +35,7 @@ export const initializeLayoutPage = () => (dispatch) => {
 };
 
 export const loginUser = (user) => (dispatch) => {
+    console.log("login user",user);
     dispatch(loginStart());
 
     dispatch(loginSuccess(user));
@@ -47,6 +49,7 @@ export const loginUser = (user) => (dispatch) => {
         .catch((error) => {
             if (isTokenExpired(error)) {
                 // logout to make user authorize one more time
+                // localStorage.removeItem("TOKEN");
                 dispatch(loginError(error));
             }
         })
@@ -60,6 +63,14 @@ function isTokenExpired(error) {
         return error.response.status === 401;
     } else return false;
 }
+
+export const logOut = () => {
+    localStorage.getItem("TOKEN");
+    localStorage.removeItem("TOKEN");
+    return {
+        type: ACTIONS.LOGOUT
+    }
+};
 
 
 
