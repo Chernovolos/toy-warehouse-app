@@ -2,52 +2,48 @@ import * as ACTIONS from "../constants/types";
 import  {TOKEN_KEY}  from "../constants/route";
 import serviceAPI from "../services/api";
 
-export const transactionsStart = () => ({type: ACTIONS.TRANSACTION_START});
-export const transactionsSuccess = (transactions) => ({type: ACTIONS.TRANSACTION_SUCCESS, payload: transactions});
-export const transactionsError = (error) => ({type: ACTIONS.TRANSACTION_ERROR, payload: error});
-export const transactionsFinish = () => ({type: ACTIONS.TRANSACTION_FINISH});
+export const transactionsListStart = () => ({type: ACTIONS.TRANSACTIONS_LIST_START});
+export const transactionsListSuccess = (transactions) => ({type: ACTIONS.TRANSACTIONS_LIST_SUCCESS, payload: transactions});
+export const transactionsListError = (error) => ({type: ACTIONS.TRANSACTIONS_LIST_ERROR, payload: error});
+export const transactionsListFinish = () => ({type: ACTIONS.TRANSACTIONS_LIST_FINISH});
 
 
 export const getTransactionsList = () => (dispatch) => {
     let token = localStorage.getItem(TOKEN_KEY);
-    dispatch(transactionsStart);
+    dispatch(transactionsListStart());
     serviceAPI.getTransactions(token)
         .then(({data}) => {
             let {transactions} = data;
-            console.log("transactions from SERVER", transactions);
-            // let transactionToys = transactions.toys;
-            dispatch(transactionsSuccess(transactions));
+            dispatch(transactionsListSuccess(transactions));
         })
         .catch((error) => {
             console.log("error", error.result);
-            dispatch(transactionsError(error));
+            dispatch(transactionsListError(error));
         })
         .finally(() => {
-            dispatch(transactionsFinish());
+            dispatch(transactionsListFinish());
         })
 };
 
-export const transactionsIdStart = () => ({type: ACTIONS.TRANSACTION_ID_START});
-export const transactionsIdSuccess = (transactionsId) => ({type: ACTIONS.TRANSACTION_ID_SUCCESS, payload: transactionsId});
-export const transactionsIdError = (error) => ({type: ACTIONS.TRANSACTION_ID_ERROR, payload: error});
-export const transactionsIdFinish = () => ({type: ACTIONS.TRANSACTION_ID_FINISH});
+export const getTransactionStart = () => ({type: ACTIONS.TRANSACTION_START});
+export const getTransactionSuccess = (transactionsId) => ({type: ACTIONS.TRANSACTION_SUCCESS, payload: transactionsId});
+export const getTransactionError = (error) => ({type: ACTIONS.TRANSACTION_ERROR, payload: error});
+export const getTransactionFinish = () => ({type: ACTIONS.TRANSACTION_FINISH});
 
 
-export const getTransactionsIdItem = (id) => (dispatch) => {
-    console.log("TransactionsIdItem from server", id);
+export const getTransactionItem = (id) => (dispatch) => {
     let token = localStorage.getItem(TOKEN_KEY);
-    dispatch(transactionsIdStart());
+    dispatch(getTransactionStart());
 
-    serviceAPI.getTransactionsId(token, id)
+    serviceAPI.getTransaction(token, id)
         .then(({data}) => {
-            console.log(data)
-            dispatch(transactionsIdSuccess(data));
+            dispatch(getTransactionSuccess(data));
         })
         .catch((error) => {
-            dispatch(transactionsIdError(error));
+            dispatch(getTransactionError(error));
         })
         .finally(() => {
-            dispatch(transactionsIdFinish());
+            dispatch(getTransactionFinish());
         })
 
 };

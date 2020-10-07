@@ -25,7 +25,6 @@ export const initializeLayoutPage = () => (dispatch) => {
         serviceAPI.profileUser(token)
             // if request performed well, then token works
             .then(({data}) => {
-                console.log("profile works\n", token);
                 // set working token to store
                 dispatch(setToken(token));
             });

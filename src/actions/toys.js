@@ -9,11 +9,9 @@ export const toysFinish = () => ({type: ACTIONS.TOYS_FINISH});
 
 export const getToysList = () => (dispatch) => {
     let token = localStorage.getItem(TOKEN_KEY);
-    console.log("token-toys", token);
     dispatch(toysStart());
     serviceAPI.getToys(token)
         .then(({data}) => {
-            console.log("data getToysList",data);
             const toys = data.toys;
             dispatch(toysSuccess(toys));
         })

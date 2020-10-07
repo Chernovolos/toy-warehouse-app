@@ -14,20 +14,24 @@ export default (state = initialState, action) => {
     switch (type) {
         case ACTION.TOYS_START:
         case ACTION.TOY_UPDATE_START:
-            console.log('GET_TOYS_START');
             return {
                 ...state,
                 preloader: true,
             };
 
         case ACTION.TOYS_SUCCESS:
-        case ACTION.TOY_UPDATE_SUCCESS:
                 return {
                     ...state,
                     preloader: false,
-                    toy: payload,
                     listToys: payload,
                 };
+
+        case ACTION.TOY_UPDATE_SUCCESS:
+            return {
+                ...state,
+                preloader: false,
+                toy: payload,
+            };
 
         case ACTION.TOYS_ERROR:
             return {

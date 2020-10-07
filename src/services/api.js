@@ -90,7 +90,7 @@ export const getTransactions = (token) => {
     })
 };
 
-export const getTransactionsId = (token, id) => {
+export const getTransaction = (token, id) => {
     return axios.get(`${BASE_URL}/transactions/${id}`, {
         headers: {
             'content-type': 'application/json',
@@ -118,5 +118,5 @@ export default {
     getTransactions,
     createToy,
     createTransactions,
-    getTransactionsId,
+    getTransaction,
 }
