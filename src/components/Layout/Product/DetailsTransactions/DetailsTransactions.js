@@ -1,7 +1,8 @@
 import React, {useEffect} from "react";
-import {Container, Row, Col, ListGroup, ListGroupItem, Badge} from "react-bootstrap";
+import {Container, Row, Col, ListGroup, ListGroupItem, Badge, Button} from "react-bootstrap";
 import {shallowEqual, useDispatch, useSelector} from "react-redux";
 import {getTransactionItem} from "../../../../actions/transactions";
+import {NEW_ID} from "../../../../constants/route";
 
 export const DetailsTransactions = (props) => {
     const dispatch = useDispatch();
@@ -14,33 +15,59 @@ export const DetailsTransactions = (props) => {
 
     const transaction = useSelector((state) => state.transactions.transaction, shallowEqual);
 
-    console.log("transactionId before map", transaction);
+    const closeTransactionDetails = () => {
+        props.history.push({pathname: "/transactions"})
+    };
+
+    let incoming = "success";
+    let outcoming = "danger";
 
     return (
         <Container>
             <Row>
+                <Col className="mb-4">
+                    <Button
+                        onClick={() => {closeTransactionDetails()}}
+                        variant="danger"
+                        className="text-uppercase"
+                    >
+                        close
+                    </Button>
+                </Col>
+            </Row>
+            <Row>
+
                 {
                     transaction && transaction.toys.map((toy) => {
                         return (
                             <Col sm={6} key={toy.id}>
                                 <ListGroup>
                                     <ListGroupItem>
-                                        <span> name: {toy.name}</span>
+                                        <h3>
+                                            <Badge
+                                                variant={transaction.type === "incoming" ? incoming: outcoming}
+                                                className="text-uppercase">
+                                                {transaction.type}
+                                            </Badge>
+                                        </h3>
                                     </ListGroupItem>
                                     <ListGroupItem>
-                                        <span>description: {toy.description}</span>
+                                        <span className="font-weight-bold"> name: {toy.name}</span>
                                     </ListGroupItem>
                                     <ListGroupItem>
-                                        <span>price: {toy.price}</span>
+                                        <span className="font-weight-bold">description: {toy.description}</span>
                                     </ListGroupItem>
                                     <ListGroupItem>
-                                        <span>totalCost: {toy.totalCost}</span>
+                                        <span className="font-weight-bold">price: {toy.price}$</span>
                                     </ListGroupItem>
                                     <ListGroupItem>
-                                        <span>quantity: {toy.quantity}</span>
+                                        <span className="font-weight-bold">totalCost: {toy.totalCost}$</span>
+                                    </ListGroupItem>
+                                    <ListGroupItem>
+                                        <span className="font-weight-bold">quantity: {toy.quantity}</span>
                                     </ListGroupItem>
                                     <ListGroupItem key={toy.category.id}>
-                                        <span>category: {toy.category.name}</span>
+                                        <span className="font-weight-bold">category: {toy.category.name}</span>
                                     </ListGroupItem>
                                 </ListGroup>
                             </Col>

@@ -21,8 +21,8 @@ class TransactionsList extends React.Component {
         return (
             <Container>
                 <Row className="justify-content-between">
-                    <Col sm={7}>
-                        <h1>Transaction</h1>
+                    <Col sm={8}>
+                        <h4>Transactions</h4>
                         <Table striped bordered variant="light">
                             <thead>
                                 <tr>

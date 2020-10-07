@@ -30,9 +30,9 @@ const ToysItem = ((props) => {
                                     <td>{category.name}</td>
                                     <td>{name}</td>
                                     <td>{description}</td>
-                                    <td>{price}</td>
+                                    <td>{price}$</td>
                                     <td>{quantity}</td>
-                                    <td>{totalCost}</td>
+                                    <td>{totalCost}$</td>
                                     <td>
                                         <Button onClick={() => onToyEdit(id)} variant="info" size="sm" className="text-uppercase">edit</Button>
                                     </td>

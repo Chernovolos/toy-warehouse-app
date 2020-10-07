@@ -1,16 +1,27 @@
 import React from "react";
-import {Button} from "react-bootstrap";
+import {Badge, Button, ListGroupItem} from "react-bootstrap";
 
 export const TransactionItem = (props) => {
     let {transaction, detailsTransactions} = props;
-
+    let incoming = "success";
+    let outcoming = "danger";
     return (
         <>
             <tr>
                 <td>{transaction.id}</td>
                 <td>{transaction.userId}</td>
-                <td>{transaction.type}</td>
-                <td>{transaction.date.slice(0, 10)}</td>
+                <td>
+                    <h5>
+                        <Badge
+                            variant={transaction.type === "incoming" ? incoming: outcoming}
+                            className="text-uppercase">
+                            {transaction.type}
+                        </Badge>
+                    </h5>
+                </td>
+                <td>
+                    {transaction.date.slice(0, 10)}
+                </td>
                 <td>
                     <Button
                         onClick={() => {detailsTransactions(transaction.id)}}
