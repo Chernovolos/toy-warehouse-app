@@ -32,6 +32,14 @@ class Header extends React.Component {
                                         about
                                     </Link>
                                 </Nav.Item>
+                                <Nav.Item className="text-uppercase ml-5">
+                                    <Link
+                                        to="/categories"
+                                        className="text-info text-decoration-none font-weight-normal"
+                                    >
+                                        categories
+                                    </Link>
+                                </Nav.Item>
                                 <Nav.Item  className="text-uppercase ml-5">
                                     <Link
                                         to="/transactions"

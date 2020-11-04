@@ -5,7 +5,7 @@ const ToysItem = ((props) => {
     let { list, onToyEdit, onToyCreate } = props;
 
     return (
-        <Col sm={9}>
+        <Col>
             <Table striped bordered variant="light">
                 <thead>
                     <tr>

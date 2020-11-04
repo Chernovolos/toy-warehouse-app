@@ -1,102 +1,81 @@
 import React from 'react';
 import { withFormik } from 'formik';
-import {Col, Container, Row, Form, Button} from 'react-bootstrap';
+import {Col, Container, Row, Form, Button, Spinner} from 'react-bootstrap';
 import {connect} from "react-redux";
 import { loginUser} from "../../../actions/login";
-import Preloader from "../Preloader/Preloader";
 
 class Login extends React.Component {
-
-   // state = {
-   //     email: "",
-   //     password: "",
-   //
-   // };
-
-    // onInputChange = ({target}) => {
-    //     this.setState({
-    //         [target.name]: target.value,
-    //     });
-    // };
-
-    // onFormSubmit = (e) => {
-    //     e.preventDefault();
-    //     e.stopPropagation();
-    //     this.props.authorization(values);
-    //     this.props.history.push("/toys");
-    //     // this.props.profile(this.state)
-    //     // this.setState({
-    //     //     email: "",
-    //     //     password: "",
-    //     // })
-    // };
 
     state = {
         isLoading: false,
     };
 
     render() {
-        let { preloader, values, handleChange, handleBlur, errors, touched, handleSubmit } = this.props;
+        let { values, handleChange, handleBlur, errors, touched, handleSubmit } = this.props;
 
         return (
             <Container>
-                {
-                    preloader ?
-                        <Row className="justify-content-center mt-5">
-                            <Preloader show={preloader}/>
-                        </Row>:
-                        <Row className="justify-content-center mt-5">
-                            <Col sm={5}>
-                                <Form onSubmit={handleSubmit}>
-                                    <Form.Group controlId="email">
-                                        <Form.Control
-                                            type="text"
-                                            name="email"
-                                            placeholder="email"
-                                            onChange={handleChange}
-                                            onBlur={handleBlur}
-                                            value={values.email}
-                                        />
-                                        {errors.email && touched.email && <div className="feedback">{errors.email}</div>}
-                                    </Form.Group>
+                <Row className="justify-content-center mt-5">
+                    <Col sm={5}>
+                        <Form onSubmit={handleSubmit}>
+                            <Form.Group controlId="email">
+                                {errors.email && touched.email && <div className="feedback text-danger">{errors.email}</div>}
+                                <Form.Control
+                                    type="text"
+                                    name="email"
+                                    placeholder="email"
+                                    onChange={handleChange}
+                                    onBlur={handleBlur}
+                                    value={values.email}
+                                />
+                            </Form.Group>
 
-                                    <Form.Group controlId="password">
-                                        <Form.Control
-                                            type="text"
-                                            name="password"
-                                            placeholder="password"
-                                            onChange={handleChange}
-                                            onBlur={handleBlur}
-                                            value={values.password}
-                                        />
-                                    </Form.Group>
-                                    {errors.password && touched.password && <div className="feedback">{errors.password}</div>}
+                            <Form.Group controlId="password">
+                                {errors.password && touched.password && <div className="feedback text-danger">{errors.password}</div>}
+                                <Form.Control
+                                    type="text"
+                                    name="password"
+                                    placeholder="password"
+                                    onChange={handleChange}
+                                    onBlur={handleBlur}
+                                    value={values.password}
+                                />
+                            </Form.Group>
 
-                                    <Form.Group>
+                            <Form.Group>
+                                {
+                                    this.props.preloader ?
+                                        <Button variant="success text-uppercase" disabled>
+                                            <Spinner
+                                                as="span"
+                                                animation="grow"
+                                                size="sm"
+                                                role="status"
+                                                aria-hidden="true"
+                                            />
+                                            Loading...
+                                        </Button>:
                                         <Button
+                                            disabled={Object.keys(errors).length || !touched}
                                             onClick={() => this.props.authorization(values)}
                                             type="submit"
-                                            variant="outline-success text-uppercase"
+                                            variant="success text-uppercase"
                                         >
-                                           "Login"
+                                            Login
                                         </Button>
-                                    </Form.Group>
-                                </Form>
-                            </Col>
-                        </Row>
-                    }
+                                }
+                            </Form.Group>
+                        </Form>
+                    </Col>
+                </Row>
             </Container>
         )
     }
 }
 
-
-
-
-
 const LoginWithForm = withFormik({
     enableReinitialize: true,
-    mapPropsToValues: () => ({
+    mapPropsToValues: (props) => ({
         email: "",
         password: "",
     }),
@@ -104,26 +83,26 @@ const LoginWithForm = withFormik({
     // Custom sync validation
     validate: values => {
         const errors = {};
-        console.log(values);
 
         if (!values.email) {
             errors.email = 'Required';
-        } else if (!/^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}$/i.test(values.email)) {
+        }
+        if (!/^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}$/i.test(values.email)) {
             errors.email = 'Invalid email address';
         }
-        if(!values.passsword) {
-            errors.passsword = "Required";
+        if (!values.password) {
+            errors.password = "Required";
         }
+        console.log(errors);
         return errors;
     },
 
     handleSubmit: (values, {props}) => {
-        console.log("submit",values);
+        // console.log("submit",values);
         props.onSubmit(values);
-        props.authorization(values);
+        // props.authorization(values);
         props.history.push("/toys");
     },
-
     displayName: "LoginForm",
 })(Login);
 

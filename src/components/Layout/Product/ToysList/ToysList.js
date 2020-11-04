@@ -1,14 +1,16 @@
 import React from "react";
 import ToysItem  from "../ToysItem/ToysItem";
 import { connect } from "react-redux";
-import { Row, Col, Container } from "react-bootstrap";
+import {Row, Container, Col, Card} from "react-bootstrap";
 import { getToysList } from "../../../../actions/toys";
-import { CategoryList } from "../CategoryList/CategoryList";
 import {NEW_ID} from "../../../../constants/route";
+import Preloader from "../../Preloader/Preloader";
 
 class ToysList extends React.Component {
     componentDidMount() {
-        this.props.initialize();
+        if(this.props.token){
+            this.props.initialize();
+        }
     }
 
     onToyEdit = (id) => {
@@ -21,23 +23,31 @@ class ToysList extends React.Component {
     };
 
     render() {
+        const {preloader, error} = this.props;
         return (
             <>
                 {
-                    this.props.error ?
+                    preloader ?
                         <Container>
-                            <h2>{this.props.error.response.statusText}</h2>
+                            <Row className="justify-content-center">
+                                <Col sm={8}>
+                                    <Preloader show={preloader}/>
+                                </Col>
+                            </Row>
                         </Container> :
                         <Container>
-                            <Row className="justify-content-between">
+                            <Row>
+                                {error ?
+                                    <Card>
+                                        <Card.Body>{error.response.statusText}</Card.Body>
+                                    </Card> :
+                                    null
+                                }
                                 <ToysItem
                                     list={this.props.listToys}
                                     onToyEdit={this.onToyEdit}
                                     onToyCreate={this.onToyCreate}
                                 />
-                                <Col sm="3">
-                                    <CategoryList/>
-                                </Col>
                             </Row>
                         </Container>
                 }
@@ -48,8 +58,10 @@ class ToysList extends React.Component {
 
 export default connect(
    state => ({
-       listToys: state.toys.listToys,
-       error: state.toys.error,
+       listToys: state.toysReducer.listToys,
+       error: state.toysReducer.error,
+       token: state.login.token,
+       preloader: state.toysReducer.preloader,
    }),
     dispatch => ({
         initialize: () => dispatch(getToysList()),

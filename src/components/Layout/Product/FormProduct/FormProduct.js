@@ -2,7 +2,7 @@ import React from "react";
 import {Container, Row, Col, Form, Button} from "react-bootstrap";
 import {connect} from "react-redux";
 import {withFormik} from "formik";
-import {createNewIncomingTransactions, getToy, getUpdateToy} from "../../../../actions/toys";
+import {createNewIncomingTransactions, getToyItem, getUpdateToy} from "../../../../actions/toys";
 import {NEW_ID} from "../../../../constants/route";
 
 class FormProduct extends React.Component {
@@ -166,11 +166,11 @@ const EditWithForm = withFormik({
 
 export default connect(
     state => ({
-        toy: state.toys.toy,
+        toy: state.toysReducer.toy,
         categoryList: state.categoryReducer.categoryList,
     }),
     dispatch => ({
-        getToy: (id) => dispatch(getToy(id)),
+        getToy: (id) => dispatch(getToyItem(id)),
         getUpdateToy: (id, toy) => dispatch(getUpdateToy(id, toy)),
         incomingTransactions: (toy, transaction) => dispatch(createNewIncomingTransactions(toy, transaction))
     })

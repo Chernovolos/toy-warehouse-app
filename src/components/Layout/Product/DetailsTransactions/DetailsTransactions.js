@@ -2,16 +2,14 @@ import React, {useEffect} from "react";
 import {Container, Row, Col, ListGroup, ListGroupItem, Badge, Button} from "react-bootstrap";
 import {shallowEqual, useDispatch, useSelector} from "react-redux";
 import {getTransactionItem} from "../../../../actions/transactions";
-import {NEW_ID} from "../../../../constants/route";
 
 export const DetailsTransactions = (props) => {
     const dispatch = useDispatch();
 
     useEffect(() => {
         const id = props.match.params.id;
-        console.log("~~~~~~~~~~~~~~~~~BEFORE DISPATCH");
         dispatch(getTransactionItem(id));
-    }, []);
+    }, [dispatch, props.match.params.id]);
 
     const transaction = useSelector((state) => state.transactions.transaction, shallowEqual);
 

@@ -1,5 +1,5 @@
 import React from "react";
-import {Badge, Button, ListGroupItem} from "react-bootstrap";
+import {Badge, Button} from "react-bootstrap";
 
 export const TransactionItem = (props) => {
     let {transaction, detailsTransactions} = props;
@@ -33,7 +33,6 @@ export const TransactionItem = (props) => {
                     </Button>
                 </td>
             </tr>
-
         </>
     );
 };
