@@ -14,6 +14,11 @@ export default (state = initialState, action) => {
 
     switch (type) {
         case ACTION.LOGIN_START:
+            return {
+                ...state,
+                preloader: true,
+            };
+
         case ACTION.LOGIN_PAGE_INITIALIZE_START:
             return {
                 ...state,
@@ -40,6 +45,7 @@ export default (state = initialState, action) => {
             return {
                 ...state,
                 preloader: false,
+                error: payload,
                 user: null,
                 token: null,
                 isAuthorized: false,

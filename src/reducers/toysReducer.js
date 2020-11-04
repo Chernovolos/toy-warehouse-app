@@ -13,6 +13,11 @@ export default (state = initialState, action) => {
 
     switch (type) {
         case ACTION.TOYS_START:
+            return {
+                ...state,
+                preloader: true,
+            };
+
         case ACTION.TOY_UPDATE_START:
             return {
                 ...state,
@@ -37,7 +42,7 @@ export default (state = initialState, action) => {
             return {
                 ...state,
                 listToys: [],
-                toy: {},
+                toy: [],
                 preloader: false,
                 error: payload,
             };
@@ -51,6 +56,7 @@ export default (state = initialState, action) => {
         case ACTION.TOY_SUCCESS:
             return {
                 ...state,
+                preloader: false,
                 toy: payload,
             };
 
