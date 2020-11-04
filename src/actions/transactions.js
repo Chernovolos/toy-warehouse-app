@@ -1,5 +1,4 @@
 import * as ACTIONS from "../constants/types";
-import  {TOKEN_KEY}  from "../constants/route";
 import serviceAPI from "../services/api";
 
 export const transactionsListStart = () => ({type: ACTIONS.TRANSACTIONS_LIST_START});
@@ -8,8 +7,8 @@ export const transactionsListError = (error) => ({type: ACTIONS.TRANSACTIONS_LIS
 export const transactionsListFinish = () => ({type: ACTIONS.TRANSACTIONS_LIST_FINISH});
 
 
-export const getTransactionsList = () => (dispatch) => {
-    let token = localStorage.getItem(TOKEN_KEY);
+export const getTransactionsList = () => (dispatch, getState) => {
+    const token = getState().login.token;
     dispatch(transactionsListStart());
     serviceAPI.getTransactions(token)
         .then(({data}) => {
@@ -31,11 +30,11 @@ export const getTransactionError = (error) => ({type: ACTIONS.TRANSACTION_ERROR,
 export const getTransactionFinish = () => ({type: ACTIONS.TRANSACTION_FINISH});
 
 
-export const getTransactionItem = (id) => (dispatch) => {
-    let token = localStorage.getItem(TOKEN_KEY);
+export const getTransactionItem = (id) => (dispatch, getState) => {
+    const token = getState().login.token;
     dispatch(getTransactionStart());
 
-    serviceAPI.getTransaction(token, id)
+    serviceAPI.getTransaction(id, token)
         .then(({data}) => {
             dispatch(getTransactionSuccess(data));
         })

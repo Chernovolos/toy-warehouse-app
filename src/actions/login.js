@@ -1,8 +1,7 @@
+import { toastr } from "react-redux-toastr";
 import * as ACTIONS from "../constants/types";
 import  {TOKEN_KEY}  from "../constants/route";
 import serviceAPI from "../services/api";
-
-
 
 // delete
 // export const setProfile = (token) => ({type: ACTIONS.SET_PROFILE, payload: token});
@@ -15,8 +14,10 @@ export const loginPageInitializeStart = () => ({type: ACTIONS.LOGIN_PAGE_INITIAL
 export const loginPageInitializeFinish =() => ({type: ACTIONS.LOGIN_PAGE_INITIALIZE_FINISH});
 
 // attempt to restore session
-export const initializeLayoutPage = () => (dispatch) => {
-    let token = localStorage.getItem(TOKEN_KEY);
+export const initializeLayoutPage = () => (dispatch, getState) => {
+    // let token = getState().login.token;
+    let token = localStorage.getItem("TOKEN");
+    // console.log("token",token);
     // turn on side effects
     dispatch(loginPageInitializeStart());
     // check if there are any token in localStorage
@@ -27,18 +28,20 @@ export const initializeLayoutPage = () => (dispatch) => {
             .then(({data}) => {
                 // set working token to store
                 dispatch(setToken(token));
-            });
+            })
+            .catch((error) => {
+                // console.log(error);
+                dispatch(loginError(error));
+                toastr.error("Error", "You are not unauthorized, check your password or email.")
+            })
     }
     // turn off side effects
     dispatch(loginPageInitializeFinish());
 };
 
 export const loginUser = (user) => (dispatch) => {
-    console.log("login user",user);
     dispatch(loginStart());
-
     dispatch(loginSuccess(user));
-
     serviceAPI.login(user)
         .then(({data}) => {
             let token = data.accessToken;
@@ -48,9 +51,11 @@ export const loginUser = (user) => (dispatch) => {
         .catch((error) => {
             if (isTokenExpired(error)) {
                 // logout to make user authorize one more time
+                logOut();
                 // localStorage.removeItem("TOKEN");
-                dispatch(loginError(error));
+                toastr.error("Error", "You are not unauthorized, check your password or email.")
             }
+            dispatch(loginError(error));
         })
         .finally(() => {
             dispatch(loginFinish());
@@ -70,21 +75,3 @@ export const logOut = () => {
         type: ACTIONS.LOGOUT
     }
 };
-
-
-
-// export const setToken = (token) => ({type: "SET_TOKEN", payload: token});
-//
-// export const getProfileUser = (item) => (dispatch, getState) => {
-//     const token = getState().loginReducer.token;
-//
-//     console.log(token);
-//     serviceAPI.profileUser(item, token)
-//         .then((response) => {
-//             // dispatch(getUserProfileSuccess(response))
-//             console.log(response)
-//         })
-//         .catch((error) => {
-//             console.log(error)
-//         })
-// };
